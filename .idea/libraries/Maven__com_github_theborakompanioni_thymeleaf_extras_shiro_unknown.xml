@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.theborakompanioni:thymeleaf-extras-shiro:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/theborakompanioni/thymeleaf-extras-shiro/unknown/thymeleaf-extras-shiro-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/theborakompanioni/thymeleaf-extras-shiro/unknown/thymeleaf-extras-shiro-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/theborakompanioni/thymeleaf-extras-shiro/unknown/thymeleaf-extras-shiro-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

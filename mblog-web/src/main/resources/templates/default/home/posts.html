@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>我的主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <div th:include="default/inc/params :: params"></div>
+</head>
+<body>
+<div th:include="default/inc/header :: header"></div>
+
+<div class="wrap" id="wrap">
+    <div class="container">
+        <div class="row">
+            <div class="main clearfix">
+                <!-- left -->
+                <div class="col-xs-12 col-md-3 side-left">
+                    <div th:include="default/home/right :: right"></div>
+                </div>
+
+                <div class="col-xs-12 col-md-9 side-right">
+                    <div class="shadow-box">
+                        <div class="filter">
+                            <ul class="">
+                                <li><a class="active" th:href="@{/home?method=posts}">我的文章</a></li>
+                            </ul>
+                        </div>
+                        <div class="stream-list">
+                            <div th:each="post:${posts}">
+                                <div class="stream-item" th:attr="id='loop-'+${post.id}">
+                                    <div class="blog-rank">
+                                        <div class="votes plus" th:if="${post.favors gt 0}">
+                                            <p th:text="${post.favors}"></p><small>喜欢</small>
+                                        </div>
+
+                                        <div class="votes " th:if="${post.favors eq 0}">
+                                            <p th:text="${post.favors}"></p><small>喜欢</small>
+                                        </div>
+                                        <div class="views hidden-xs">
+                                            <p th:text="${post.comments}"></p><small>评论</small>
+                                        </div>
+                                    </div>
+                                    <div class="summary">
+                                        <h2 class="title"><a th:href="@{'/view/'+${post.id}}"> <p th:text="${post.title}"></p></a></h2>
+                                        <div class="excerpt wordbreak hidden-xs" th:text="${post.summary}"> &nbsp;</div>
+
+                                        <div class="thumbs clearfix" th:each="alb : ${post.albums}">
+                                            <div class="media col-xs-4 col-sm-4 col-md-4">
+                                                <a th:title="${post.title}" th:href="@{alb.original}">
+                                                    <img th:src="@{/assets/images/spinner-overlay.png}" th:attr="data-original=${alb.screenshot}" />
+                                                <!--    <img th:if="alb.store ne 1" th:src="@{/assets/images/spinner-overlay.png}" th:attr="data-original="#resource(${att.screenshot})"/>-->
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="foot-block clearfix">
+                                            <div class="author">
+                                                <time th:text="${#dates.format(post.created , 'dd/MM/yyyy HH:mm')}"></time>
+                                            </div>
+                                            <ul class="tags">
+                                                <li th:each="tag : ${#strings.listSplit(post.tags,',')} ">
+                                                    <a class="tag tag-sm" th:href="@{'/tag/'+${tag}}" th:text="${tag}"></a>
+                                                </li>
+                                            </ul>
+                                            <div class="pull-right hidden-xs">
+                                                <a class="act_edit" href="javascript:void(0);" data-evt="edit" th:attr="data-id=${post.id}">修改</a>
+                                                <a class="act_delete" href="javascript:void(0);" data-evt="trash" th:attr="data-id=${post.id}">删除</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="default/inc/footer :: footer"></div>
+</body>
+</html>

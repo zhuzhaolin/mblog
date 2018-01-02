@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MTONS邮件</title>
+</head>
+<body>
+<div class="wrap">
+    <div class="main">
+        <a th:href="@{${domain}+ '/email/bind?code='+${code}}">点此链接完成绑定邮箱</a>
+    </div>
+</div>
+</body>
+</html>

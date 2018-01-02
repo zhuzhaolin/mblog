@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>修改用户信息</title>
+    <div th:include="themes/default/inc/params :: params"></div>
+    <script type="text/javascript" th:src="@{/assets/vendors/validate/jquery-validate.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/modules/usersetting.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/vendors/jcrop/jquery.jcrop.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/vendors/jcrop/css/jquery.Jcrop.min.css}"></script>
+  <!--  <style>
+        .tab{
+            display: none;
+        }
+    </style>-->
+</head>
+<body>
+<div th:include="themes/default/inc/header :: header"></div>
+
+<div class="wrap" id="wrap">
+    <div class="container">
+        <div class="row">
+            <div class="main clearfix">
+                <div class="col-xs-12 col-md-12">
+                    <div class="panel panel-default stacked">
+                        <div class="panel-heading">
+                            <ul class="nav nav-pills account-tab">
+                                <li class="active"><a>基本信息</a></li>
+                                <li><a>修改头像</a></li>
+                                <li><a>修改密码</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div id="message">
+                                <div class="alert alert-danger" th:if="${message} != null">
+                                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div id="updateSuccess" class="alert alert-success" hidden="hidden">
+                                    <button type="button" class="close" data-dismiss="alert"><span
+                                            aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div id="updateFail" class="alert alert-danger" hidden="hidden">
+                                    <button type="button" class="close" data-dismiss="alert"><span
+                                            aria-hidden="true" >&times;</span></button>
+                                </div>
+                            </div>
+                            <div id="module">
+                                <span class="tab selected" th:include="themes/default/account/module/profile :: profile"></span>
+                                <span class="tab" th:include="themes/default/account/module/avatar :: avatar"></span>
+                                <span class="tab" th:include="themes/default/account/module/password :: password"></span>
+                                <span class="tab" th:include="themes/default/account/module/email :: email"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="themes/default/inc/footer :: footer"></div>
+</body>
+<script>
+    /*<![CDATA[*/
+    $(document).ready(function(){
+        function swithTab(li,menu_tab){
+            li.click(function(){
+                var index=$(this).index();
+                menu_tab.eq(index).addClass("selected").siblings().removeClass("selected");
+                li.removeClass("active");
+                li.eq(index).addClass("active").siblings().removeClass("active");
+
+            });
+        }
+
+        swithTab($(".nav li"),$("#module .tab"));
+
+
+        $("#modify_email").click(function () {
+            $("#module .tab").eq(3).addClass("selected").siblings().removeClass("selected");
+        });
+
+    });
+    //选择图片，马上预览
+    function xmTanUploadImg(obj) {
+        var file = obj.files[0];
+
+        console.log(obj);console.log(file);
+        console.log("file.size = " + file.size);  //file.size 单位为byte
+        var reader = new FileReader();
+
+        reader.readAsDataURL(file);
+        //读取文件过程方法
+        reader.onloadstart = function (e) {
+            console.log("开始读取....");
+        }
+        reader.onprogress = function (e) {
+            console.log("正在读取中....");
+        }
+        reader.onabort = function (e) {
+            console.log("中断读取....");
+        }
+        reader.onerror = function (e) {
+            console.log("读取异常....");
+        }
+        reader.onload = function (e) {
+            console.log("成功读取....");
+
+            var img = document.getElementById("target");
+            img.src = e.target.result;
+            var src1 = e.target.result;
+            //或者 img.src = this.result;  //e.target == this
+        }
+
+    }
+
+
+    /*]]>*/
+</script>
+</html>

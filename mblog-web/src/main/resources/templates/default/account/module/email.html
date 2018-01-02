@@ -1,0 +1,45 @@
+<div xmlns:th="http://www.thymeleaf.org"  th:fragment="email">
+    <div class="tab-pane active" id="profile">
+        <form id="pf" class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-lg-3" for="newEmail">修改邮箱地址</label>
+                <div class="col-lg-4">
+                    <input type="text" class="form-control" name="email" id="newEmail"
+                           th:attr="value=${session.profile.email}" maxlength="64" data-required="required"
+                           data-conditional="email" data-description="email" data-describedby="message"/>
+                    <p class="help-block">修改后将会重新发送验证邮件.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" onclick="updateEmail()">提交</button>
+                </div>
+            </div><!-- /form-actions -->
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#pf').validate({
+            onKeyup : true,
+            onChange : true,
+            eachValidField : function() {
+                $(this).closest('div').removeClass('has-error').addClass('has-success');
+            },
+            eachInvalidField : function() {
+                $(this).closest('div').removeClass('has-success').addClass('has-error');
+            },
+            conditional : {
+                email : function() {
+                    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($(this).val());
+                }
+            },
+            description : {
+                email : {
+                    conditional : '<div class="alert alert-danger">邮箱格式不合法</div>'
+                }
+            }
+        });
+    });
+</script>

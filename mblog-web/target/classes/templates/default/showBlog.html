@@ -1,0 +1,60 @@
+<div class="shadow-box" xmlns:th="http://www.thymeleaf.org" th:fragment="showBlog">
+    <div class="filter">
+        <ul class="">
+            <li><a class="active" th:href="@{/home}">动态</a></li>
+        </ul>
+    </div>
+    <div class="stream-list p-stream">
+        <div th:if="${posts} != null">
+            <div th:each="post : ${posts}">
+                <div class="stream-item" th:attr="id='loop-'+${post.id}">
+                    <div class="summary">
+                        <a th:href="@{'/view/' + ${post.id}}">
+                            <div class="title">
+                                <span class="label label-danger" th:if="${post.featured gt 0}">推荐</span>
+                                <h2 th:text="${post.title}"></h2>
+                            </div>
+                        </a>
+                        <div class="thumbs clearfix" th:if="${post.albums} != null">
+                            <div th:each="alb : ${post.albums}">
+                                <div th:if="${postStat.index lt 4}">
+                                    <div class="media col-xs-3 col-sm-3 col-md-3">
+                                        <a th:attr="title=${post.title}" th:href="@{${alb.original}}">
+                                            <img th:src="@{/assets/images/spinner-overlay.png}"
+                                                 th:attr="data-original=${alb.preview}"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-rank clearfix">
+                        <div class="users">
+                            <a th:href="@{'/ta/'+${post.author.id}}">
+                                <div class="ava">
+                                    <img class="img-circle" th:src="@{${post.author.avatar}}"/>
+                                </div>
+                            </a>
+                            <div class="info">
+                                <strong th:text="${post.author.name}"></strong>
+                                <time th:text="${#dates.format(post.created ,'MM月dd日')}"></time>
+                                <time th:text="${#dates.createNow()}"></time>
+                            </div>
+                        </div>
+                        <div class="counts">
+                            <span class="act" th:text="${post.favors}"><i class="praise_icon"></i></span>
+                            <span class="act" th:text="${post.comments}"><i class="comment_icon"></i></span>
+                        </div>
+                        <div class="foot-block clearfix">
+                            <ul class="tags">
+                                <li th:each="tag : ${#strings.listSplit(post.tags,',')} ">
+                                    <a class="tag tag-sm" th:href="@{'/tag/'+${tag}+'/'}" th:text="${tag}"> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout_login">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <link rel="stylesheet" th:href="@{/assets/vendors/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/login.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendors/animate/animate.min.css}" />
+
+
+    <script type="text/javascript" th:src="@{/assets/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery-migrate-1.2.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/vendors/validate/jquery-validate.js}"></script>
+
+
+    <link rel="apple-touch-icon-precomposed" href="http://mtons.com/assets/images/logo/m99.png"/>
+    <link rel="shortcut icon" href="http://mtons.com/assets/images/logo/m.png"/>
+</head>
+<body class="sign">
+
+</body>
+<script type="text/javascript">
+    var bodyBgs = [];
+    bodyBgs[0] = "/assets/images/first/bg-1.jpg";
+    bodyBgs[1] = "/assets/images/first/bg-2.jpg";
+    bodyBgs[2] = "/assets/images/first/bg-3.jpg";
+    bodyBgs[3] = "/assets/images/first/bg-4.jpg";
+    bodyBgs[4] = "/assets/images/first/bg-5.jpg";
+    bodyBgs[5] = "/assets/images/first/bg-9.jpg";
+    var randomBgIndex = Math.round( Math.random() * 5 );
+    //输出随机的背景图
+    document.write('<style>body{background:url(' + bodyBgs[randomBgIndex] + ') no-repeat 100% 0}</style>');
+</script>
+</html>

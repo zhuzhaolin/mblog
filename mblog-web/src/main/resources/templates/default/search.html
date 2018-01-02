@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>搜索</title>
+    <div th:include="default/inc/include :: include"></div>
+</head>
+<body>
+<div th:include="default/inc/header :: header"></div>
+<div class="wrap" id="wrap">
+    <div class="container">
+        <div class="row">
+            <div class="main clearfix">
+                <!-- left -->
+                <div class="col-xs-12 col-md-9 side-left">
+               <!--     <#nested>-->
+                    <div class="shadow-box">
+                        <!-- tab -->
+                        <div class="filter">
+                            <div class="alert" style="margin-bottom:0">
+                                <li><span>搜索 <strong th:text="${q}"></strong>, 共 <span th:text="${#lists.size(posts)}"></span>个结果.</span></li>
+                            </div>
+                        </div>
+                        <!-- tab end -->
+                        <!-- tab panes -->
+                        <div class="stream-list p-stream">
+                            <div th:include="default/showBlog :: showBlog"></div>
+                            <div class="stream-item" th:if="${#lists.size(posts)eq 0}">
+                                该目录下还没有内容!
+                            </div>
+                            <!--<#if  page.content?size == 0>
+                                <div class="stream-item">
+                                    该目录下还没有内容!
+                                </div>
+                            </#if>
+-->
+                        </div>
+                    </div>
+                </div>
+                <!-- right sidebar-->
+                <div class="col-xs-12 col-md-3 side-right hidden-xs hidden-sm">
+                    <div th:include="default/inc/right :: right"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="default/inc/footer :: footer"></div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var hot_li_template = '<li><div class="li-out"><span class="last"><i>{0}</i></span><span class="name"><a  href="{1}">{2}</a></span><span class="nums">{3}</span></div></li>'
+    var latest_li_template = '<li><div class="li-out"><span class="name"><a  href="{1}">{2}</a></span><span class="nums">{3}</span></div></li>'
+
+    var hotUser_li_template = '<li class=""><a  href="{1}"><img src="${base}{0}" class="imguser"/></a></li>'
+
+    seajs.use('sidebox', function (sidebox) {
+        sidebox.init({
+            latestUrl : '/api/latests.json',
+            hotUrl : '/api/hots.json',
+            hotTagUrl : '/api/hot_tags.json',
+            hotUserUrl:'/api/hotusers.json',
+
+            maxResults :10,
+            // callback
+            onLoadHot : function (i, data) {
+                var url = '/view/' + data.id;
+                var item = jQuery.format(hot_li_template, i + 1, url, data.title, numberScale(data.views));
+                return item;
+            },
+            onLoadLatest : function (i, data) {
+                var url = '/view/' + data.id;
+                var item = jQuery.format(latest_li_template, i + 1, url, data.title, numberScale(data.views));
+                return item;
+            },
+            onLoadHotUser : function (i, data) {
+                var url = '/ta/' + data.id;
+                var item = jQuery.format(hotUser_li_template,data.avatar,url,data.name, data.fans);
+                return item;
+            }
+        });
+    });
+
+    $(function () {
+        $('input[name=q]', $('#_search_box')).val([[${q}]]);
+    });
+    /*]]>*/
+</script>
+</html>
