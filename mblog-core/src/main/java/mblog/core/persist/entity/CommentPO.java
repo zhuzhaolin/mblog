@@ -1,14 +1,13 @@
 package mblog.core.persist.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by zhuzhaolin on 2017/10/29.
  */
+@Entity
+@Table(name = "mto_comments")
 public class CommentPO {
 
     @Id
@@ -36,6 +35,8 @@ public class CommentPO {
     private Date created;
 
     @Column(name = "author_id")
+    private long authorId;
+
     private int status;
 
     public long getId() {
@@ -76,6 +77,14 @@ public class CommentPO {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
     }
 
     public int getStatus() {

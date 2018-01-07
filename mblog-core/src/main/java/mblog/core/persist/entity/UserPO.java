@@ -101,7 +101,7 @@ public class UserPO {
      */
     private String signature;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE ,fetch = FetchType.EAGER)
     @JoinTable(name = "mto_user_role" , joinColumns = {@JoinColumn(name = "user_id")}  , inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<RolePO> roles = new ArrayList<>();
 

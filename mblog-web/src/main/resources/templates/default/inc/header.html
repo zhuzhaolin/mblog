@@ -1,4 +1,4 @@
-<div xmlns:th="http://www.thymeleaf.org"  th:fragment="header">
+<div xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" th:fragment="header">
     <div id="loginalert" style="display: none; top: 0px;" class="fade in">
         <div class="pd20 loginpd">
             <h3><i class="closealert fr" data-dismiss="modal" aria-label="Close"></i>
@@ -82,7 +82,7 @@
                                 <a href="#" class="ava dropdown-toggle" data-toggle="dropdown">
                                     <img class="img-circle" th:src="@{${session.profile.avatar}}"/>
                                 </a>
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu " role="menu">
                                     <li>
                                         <a th:href="@{/account/profile}" class="ava">
                                             <!--  &lt;!&ndash; #showAva(${profile.avatar}, "img-circle")
@@ -94,18 +94,18 @@
                                     <li class="divider"></li>
 
 
-                                    <li><a th:href="@{/admin}">后台管理</a></li>
+                                    <li data-shiro-hasPermission="admin"><a th:href="@{/admin}">后台管理</a></li>
 
 
                                     <li><a th:href="@{/logout}">退出</a></li>
                                 </ul>
                             </li>
                         </div>
-                        <!--       <div th:if="${!profile}">
-                               <li><a href="$base/login" class="signin">登录</a></li>
-                               <li class="hidden-xs"><span class="or">or</span></li>
-                               <li><a href="$base/reg" class="signup">注册</a></li>
-                               </div>-->
+                        <div th:if="${session.profile }==null">
+                            <li><a th:href="@{/login}" class="signin">登录</a></li>
+
+                            <li><a th:href="@{/reg}" class="signup">注册</a></li>
+                        </div>
                     </ul>
                 </div>
             </div>

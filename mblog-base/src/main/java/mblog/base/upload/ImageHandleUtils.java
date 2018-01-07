@@ -61,7 +61,7 @@ public class ImageHandleUtils {
      * @param height  裁剪高度
      * @return boolean
      *
-     * @throws java.io.IOException io异常
+     * @throws IOException io异常
      * @throws IM4JavaException    im4j 异常
      * @throws InterruptedException 中断异常
      */

@@ -4,13 +4,17 @@ package mblog.shiro.realm;
 
 
 import mblog.core.data.AccountProfile;
+import mblog.core.data.AuthMenu;
+import mblog.core.data.User;
 import mblog.core.persist.entity.UserPO;
 import mblog.core.persist.service.UserService;
 import mblog.core.persist.service.impl.UserServiceImpl;
 import mblog.shiro.authc.AccountAuthenticationInfo;
 import mtons.modules.lang.Const;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -21,6 +25,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by zhuzhaolin on 2017/10/9.
@@ -47,7 +52,24 @@ public class AccountRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-         int i = 1+1;
+         String username = (String) principals.fromRealm(getName()).iterator().next();
+         if (username != null){
+             User user = userService.getByUsername(username);
+             if (user != null){
+                 SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+                 List<AuthMenu> menuList = userService.getMenuList(user.getId());
+                 for (AuthMenu menu : menuList){
+                     if (StringUtils.isNotEmpty(menu.getPermission())){
+                         //添加基於permission的權限信息
+                         for (String permission : StringUtils.split(menu.getPermission(),",")){
+                             info.addStringPermission(permission);
+                         }
+
+                     }
+                 }
+                 return info;
+             }
+         }
         return null;
     }
 

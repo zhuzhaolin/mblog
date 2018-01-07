@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
  * Created by zhuzhaolin on 2017/11/21.
  */
 public interface FeedsDao extends JpaSpecificationExecutor<FeedsPO> , CrudRepository<FeedsPO , Integer> {
-    Page<FeedsPO> findAllByOwnIdOrderByIdDesc(Pageable pageable , long ownId);
+    Page<FeedsPO> findAllByOwnIdOrderByIdDesc(Pageable pageable, long ownId);
 }

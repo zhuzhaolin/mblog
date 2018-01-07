@@ -8,9 +8,12 @@ import mblog.core.persist.service.ConfigService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhuzhaolin .
@@ -36,5 +39,17 @@ public class ConfigServiceImpl implements ConfigService {
             rets.add(r);
         }
         return rets;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Config> findAll2Map() {
+        List<Config> list = findAll();
+        Map<String , Config> ret = new LinkedHashMap<>();
+
+        for (Config c : list){
+            ret.put(c.getKey() , c);
+        }
+        return ret;
     }
 }

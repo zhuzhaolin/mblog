@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public interface PostService {
 
+    Page<Post> paging4Admin(Pageable pageable, long id, String title, int group);
+
     /**
      * 根据关键字搜索
      * @param pageable
@@ -22,7 +24,7 @@ public interface PostService {
      * @return
      * @throws Exception
      */
-    Page<Post> search(Pageable pageable , String q) throws Exception;
+    Page<Post> search(Pageable pageable, String q) throws Exception;
 
     /**
      * 根据Ids查询 - 多图
@@ -31,5 +33,5 @@ public interface PostService {
      */
     Map<Long , Post> findMultimeMapByIds(Set<Long> ids);
 
-   List<Post> pagingByAuthorId(PageRequest pageRequest , long userId);
+   List<Post> pagingByAuthorId(PageRequest pageRequest, long userId);
 }

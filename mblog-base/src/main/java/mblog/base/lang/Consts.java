@@ -31,6 +31,8 @@ public interface Consts {
      */
     int IGNORE = -1;
 
+    int ZERO = 0;
+
     /**
      * 初始-初始化
      */

@@ -1,9 +1,13 @@
 package mblog.core.persist.service;
 
 import mblog.core.data.AccountProfile;
+import mblog.core.data.AuthMenu;
 import mblog.core.data.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import sun.security.util.Password;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,6 +66,8 @@ public interface UserService {
 
     AccountProfile updateActiveEmail(long id, int activeEmail);
 
+    User getByUsername(String username);
+
     /**
      * 修改头像
      *
@@ -70,4 +76,8 @@ public interface UserService {
      * @return
      */
     AccountProfile updateAvatar(long id, String path);
+
+    Page<User> paging(Pageable pageable);
+
+    List<AuthMenu> getMenuList(long id);
 }

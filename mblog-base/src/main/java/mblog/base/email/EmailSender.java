@@ -9,7 +9,7 @@ import java.util.Map;
  * Created in2017/12/6 22:06.
  */
 public interface EmailSender {
-    void sendTemplate(String targetAddress , String subject , String template , Context data);
+    void sendTemplate(String targetAddress, String subject, String template, Context data);
 
-    void sendText(String targetAddress , String subject , String content , boolean isHtml);
+    void sendText(String targetAddress, String subject, String content, boolean isHtml);
 }

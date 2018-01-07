@@ -13,7 +13,7 @@ public interface VerifyService {
      * @param target
      * @return
      */
-    String generateCode(long userId , int type , String target);
+    String generateCode(long userId, int type, String target);
 
     /**
      * 检验验证码有效性
@@ -21,5 +21,5 @@ public interface VerifyService {
      * @param code
      * @return token
      */
-    String verify(long userId , int type , String code);
+    String verify(long userId, int type, String code);
 }

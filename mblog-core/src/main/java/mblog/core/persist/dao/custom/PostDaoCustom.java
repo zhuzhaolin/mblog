@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
  * Created in2018/1/1 16:52.
  */
 public interface PostDaoCustom {
-    Page<Post> search(Pageable pageable , String q) throws Exception;
+    Page<Post> search(Pageable pageable, String q) throws Exception;
 }

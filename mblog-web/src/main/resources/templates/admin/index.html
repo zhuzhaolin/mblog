@@ -1,66 +1,187 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<div th:include="themes/admin/layout/default :: default"></div>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <script type="text/javascript" th:src="@{assets/vendors/easypiechart/jquery.easy-pie-chart.js}"></script>
-    <script type="text/javascript" th:inline="javascript">
-       /* $(".easypiechart").attr();*/
-        $(document).ready(function(){
-            var message = [[${memPercent}]];
-            $(".easypiechart").attr("data-percent" , [[${memPercent}]] );
-        });
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>后台管理</title>
 
+    <link href="/assets/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link href="/assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="/assets/vendors/treeTable/themes/vsStyle/treeTable.min.css" rel="stylesheet"/>
+
+    <!-- Custom Theme Style -->
+    <link href="/assets/admin/css/custom.min.css" rel="stylesheet"/>
+
+    <!-- jQuery -->
+    <script src="/assets/js/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src='/assets/vendors/validate/jquery-validate.js'></script>
+    <!-- FastClick -->
+    <script src="/assets/vendors/fastclick/lib/fastclick.js"></script>
+
+    <script src="/assets/vendors/layer/layer.js"></script>
+    <script src="/assets/vendors/treeTable/jquery.treeTable.min.js"></script>
+
+    <script type='text/javascript' src='/assets/vendors/Chart.js/dist/Chart.min.js'></script>
+
+
+    <script type="text/javascript">
+        window.UEDITOR_HOME_URL = '/assets/vendors/ueditor/';
     </script>
-    <meta charset="UTF-8"/>
 </head>
-<body>
-<div class="row m-t-large m-b">
-    <div class="col-lg-6">
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="panel">
-                    <div class="panel-heading bg-white">
-                        <div class="text-center h5">系统状态</div>
-                    </div>
-                    <div class="panel-body" style="height: 160px;">
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>内存消耗:</td>
-                                <td>
-                                    <b th:text="${usedMemory}" />M / <b th:text="${totalMemory}" />M
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width:120px;">操作系统:</td>
-                                <td> <b th:text="${os}"/></td>
-                            </tr>
-                            <tr>
-                                <td style="width:120px;">JDK版本:</td>
-                                <td> <b th:text="${javaVersion}" /></td>
-                            </tr>
-                        </table>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="/index" class="site_title"><span>Mtons</span></a>
+                </div>
+                <div class="clearfix"></div>
+                <br/>
+
+                <!-- sidebar menu -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <h3>系统菜单</h3>
+                        <ul class="nav side-menu">
+                            <li><a href="/admin"><i class="fa fa-home"></i> Home</a></li>
+
+                            <div th:each="menu : ${results}" th:attr="data-shiro-hasPermission=${menu.permission}">
+                                <li><a th:href="@{'/'+${menu.url}}" th:attr="nav=${menu.sort}"><i th:class="${menu.icon}"></i><p th:text="${menu.name}"></p></a></li>
+                            </div>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-lg-5">
-                <div class="panel">
-                    <div class="panel-heading bg-white" >
-                        <div class="text-center h5">内存使用情况</div>
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                     </div>
-                    <div class="panel-body text-center">
-                        <div class="inline">
-                            <div class="easypiechart" data-percent=""  data-bar-color="#576879">
-                                <span class="h2" style="margin-left:10px;margin-top:10px;display:inline-block"> <b th:text="${memPercent}" /></span>%
-                                <div class="easypie-text text-muted" >可用</div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <img th:src="${session.profile.avatar}" alt=""/>
+                                <p th:text="${session.profile.username}"></p>
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a th:href="@{/account/profile}"> Profile</a></li>
+                                <li><a th:href="@{/logout}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div>
+               <!-- <#nested/>-->
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3 th:text="${session.profile.username}"> <small> 欢迎使用Mblog</small></h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>系统状态</h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="height: 231px;">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>内存消耗:</td>
+                                        <td th:text="${usedMemory}+ 'M /'+ ${totalMemory}+'M'"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:120px;">操作系统:</td>
+                                        <td th:text="${os}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:120px;">JDK版本:</td>
+                                        <td th:text="${javaVersion}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>内存使用情况</h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <canvas id="canvas"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+            <div class="pull-right">
+                Mblog - Powered By <a href="http://mtons.com/?copyright" target="_blank">Mtons</a>
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
     </div>
 </div>
-
+<!-- Custom Theme Scripts -->
+<script src="/assets/admin/js/custom.min.js"></script>
+<script src="/assets/admin/js/app.data.js"></script>
 </body>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        var ctx = document.getElementById("canvas");
+        var data = {
+            labels: [
+                "可用",
+                "已用"
+            ],
+            datasets: [{
+             /*   data: [[[${memPercent}]], 100 - [[${memPercent}]]],*/
+                data: [ [[${memPercent}]], 100 - [[${memPercent}]]],
+                backgroundColor: [
+                    "#455C73",
+                    "#9B59B6"
+                ],
+                hoverBackgroundColor: [
+                    "#34495E",
+                    "#B370CF"
+                ]
+            }]
+        };
+
+        var canvasDoughnut = new Chart(ctx, {
+            type: 'doughnut',
+            tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+            data: data
+        });
+    })
+    /*]]>*/
+</script>
 </html>

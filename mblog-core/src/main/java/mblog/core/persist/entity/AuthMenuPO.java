@@ -26,9 +26,8 @@ public class AuthMenuPO {
 
     private String permission;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    private AuthMenuPO parent;
+    private long parentId;
 
     @Column(name = "parent_ids")
     private String parentIds;
@@ -39,8 +38,8 @@ public class AuthMenuPO {
     @Fetch(FetchMode.SUBSELECT)
     private List<RolePO> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "parent" , fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SUBSELECT)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "mto_role_menu" , joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "menu_id") })
     private List<AuthMenuPO> children = new ArrayList<>();
 
     public long getId() {
@@ -83,12 +82,12 @@ public class AuthMenuPO {
         this.permission = permission;
     }
 
-    public AuthMenuPO getParent() {
-        return parent;
+    public long getParentId() {
+        return parentId;
     }
 
-    public void setParent(AuthMenuPO parent) {
-        this.parent = parent;
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
     }
 
     public String getParentIds() {

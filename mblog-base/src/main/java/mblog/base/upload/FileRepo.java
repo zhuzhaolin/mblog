@@ -29,7 +29,7 @@ public interface FileRepo {
      * @return
      * @throws Exception
      */
-    String tempScale(MultipartFile file , String basePath , int maxWith) throws Exception;
+    String tempScale(MultipartFile file, String basePath, int maxWith) throws Exception;
 
     String getRoot();
 }

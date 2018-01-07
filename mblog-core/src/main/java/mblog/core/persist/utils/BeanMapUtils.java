@@ -43,19 +43,9 @@ public class BeanMapUtils {
 
     public static AuthMenu copy(AuthMenuPO po , String ... ignore){
         AuthMenu am = new AuthMenu();
-        List<AuthMenu> children = new ArrayList<>();
-        BeanUtils.copyProperties(po , am ,"parent","children" );
-        List<String> ignoreList = Arrays.asList(ignore);
-        if (po.getParent() != null && !ignoreList.contains("parent")){
-            am.setParent(BeanMapUtils.copy(po.getParent()));
-        }
-        for (AuthMenuPO child : po.getChildren()){
-            AuthMenu childAuthMenu = BeanMapUtils.copy(child ,"parent");
-            childAuthMenu.setParent(am);
-            children.add(childAuthMenu);
-        }
-        am.setChildren(children);
+        BeanUtils.copyProperties(po, am, "children");
         return am;
+
     }
 
     public static AccountProfile copyPassport(UserPO po){
@@ -87,16 +77,23 @@ public class BeanMapUtils {
         return passport;
     }
 
-    public static Role copy(RolePO po){
+    public static Role copy(RolePO po) {
         Role r = new Role();
-        BeanUtils.copyProperties(po , r , "users","authMenus");
+        BeanUtils.copyProperties(po, r, "users", "authMenus");
         List<AuthMenu> authMenus = new ArrayList<>();
-        for (AuthMenuPO authMenuPO : po.getAuthMenus()){
-            AuthMenu authMenu = BeanMapUtils.copy(authMenuPO);
+        for (AuthMenuPO authMenuPO : po.getAuthMenus()) {
+            AuthMenu authMenu = new AuthMenu();
+            BeanUtils.copyProperties(authMenuPO, authMenu, "roles", "children");
             authMenus.add(authMenu);
         }
         r.setAuthMenus(authMenus);
         return r;
+    }
+
+    public static Comment copy(CommentPO po){
+        Comment ret = new Comment();
+        BeanUtils.copyProperties(po , ret);
+        return ret;
     }
 
     public static Post copy(PostPO postPO , int level){

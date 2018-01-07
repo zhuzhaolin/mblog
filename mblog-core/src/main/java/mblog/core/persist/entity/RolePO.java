@@ -20,7 +20,7 @@ public class RolePO {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE ,fetch = FetchType.EAGER)
     @JoinTable(name = "mto_role_menu", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "menu_id") })
     @Fetch(FetchMode.SUBSELECT)
     private List<AuthMenuPO> authMenus = new ArrayList<>();

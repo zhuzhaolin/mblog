@@ -14,7 +14,7 @@
     <logger name="org.thymeleaf" level="INFO"/>
 
     <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>F:\mbloglog/logs/${APP_NAME}.log</File>
+        <File>F:/mbloglog/logs/${APP_NAME}.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rolling over -->
             <FileNamePattern>${APP_NAME}.%d{yyyy-MM-dd}.log</FileNamePattern>

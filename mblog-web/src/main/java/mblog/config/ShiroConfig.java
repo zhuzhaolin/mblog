@@ -1,6 +1,7 @@
 package mblog.config;
 
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import mblog.shiro.authc.AccountSubjectFactory;
 import mblog.shiro.realm.AccountRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -50,6 +51,18 @@ public class ShiroConfig {
     }
 
 
+    /**
+     * 配置shiro拦截器链
+     *
+     * anon  不需要认证
+     * authc 需要认证
+     * user  验证通过或RememberMe登录的都可以
+     *
+     * 当应用开启了rememberMe时,用户下次访问时可以是一个user,但不会是authc,因为authc是需要重新认证的
+     *
+     * 顺序从上到下,优先级依次降低
+     *
+     */
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
@@ -60,7 +73,27 @@ public class ShiroConfig {
         filterFactoryBean.setUnauthorizedUrl("/unauthorizedUrl");
 
         filterChainDefinitionMap.put("/login" , "anon");
+        filterChainDefinitionMap.put("/home*", "user");
         filterChainDefinitionMap.put("/home/**" , "user");
+
+        filterChainDefinitionMap.put("/admin", "authc,perms[admin]");
+        filterChainDefinitionMap.put("/admin/", "authc,perms[admin]");
+        filterChainDefinitionMap.put("/admin/index", "authc,perms[admin]");
+
+        filterChainDefinitionMap.put("/admin/posts/**", "authc,perms[posts:view]");
+
+        filterChainDefinitionMap.put("/admin/comments/**", "authc,perms[comments:view]");
+
+        filterChainDefinitionMap.put("/admin/users/**", "authc,perms[users:view]");
+
+        filterChainDefinitionMap.put("/admin/config/**", "authc,perms[config:view]");
+
+        filterChainDefinitionMap.put("/admin/roles/list", "authc,perms[roles:view]");
+
+        filterChainDefinitionMap.put("/admin/authMenus/list", "authc,perms[authMenus:view]");
+
+        filterChainDefinitionMap.put("/admin/friendLink/list", "authc,perms[friendLink:edit]");
+
         filterChainDefinitionMap.put("/**" , "anon");
         filterChainDefinitionMap.put("/logout" , "logout");
         filterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -103,5 +136,9 @@ public class ShiroConfig {
         return lifecycleBeanPostProcessor;
     }
 
+    @Bean
+    public ShiroDialect shiroDialect(){
+        return new ShiroDialect();
+    }
 
 }

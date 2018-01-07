@@ -3,10 +3,13 @@ package mblog.core.persist.service.impl;
 
 import mblog.base.exception.MtonsException;
 import mblog.core.data.AccountProfile;
+import mblog.core.data.AuthMenu;
 import mblog.core.data.BadgesCount;
 import mblog.core.data.User;
 import mblog.core.persist.dao.UserDao;
+import mblog.core.persist.entity.AuthMenuPO;
 import mblog.core.persist.entity.PostPO;
+import mblog.core.persist.entity.RolePO;
 import mblog.core.persist.entity.UserPO;
 import mblog.core.persist.service.NotifyService;
 import mblog.core.persist.service.UserService;
@@ -20,6 +23,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Service;
@@ -105,11 +111,11 @@ public class UserServiceImpl implements UserService {
 
         BeanUtils.copyProperties(user , po);
 
-        Date now = Calendar.getInstance().getTime();
+        //Date now = Calendar.getInstance().getTime();
         po.setPassword(CommonUtils.encryptedPassword(user.getPassword()));
         po.setStatus(EntityStatus.ENABLED);
         po.setActiveEmail(EntityStatus.ENABLED);
-        po.setCreated(now);
+       // po.setCreated(now);
 
         userDao.save(po);
         return BeanMapUtils.copy(po , 0);
@@ -200,6 +206,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public User getByUsername(String username) {
+        UserPO po = userDao.findByUsername(username);
+        User ret = null;
+        if (po != null){
+            ret = BeanMapUtils.copy(po , 0);
+        }
+        return ret;
+    }
+
+    @Override
     public AccountProfile updateAvatar(long id, String path) {
         UserPO po = userDao.findOne(id);
         if (po != null){
@@ -207,6 +224,36 @@ public class UserServiceImpl implements UserService {
             po.setAvatar(path);
         }
         return BeanMapUtils.copyPassport(po);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<User> paging(Pageable pageable) {
+        Page<UserPO> page = userDao.findAllByOrderByIdDesc(pageable);
+        List<User> rets = new ArrayList<>();
+
+        for (UserPO po : page.getContent()){
+            User u = BeanMapUtils.copy(po , 1);
+            rets.add(u);
+        }
+        return new PageImpl<User>(rets , pageable , page.getTotalElements());
+    }
+
+    @Override
+    public List<AuthMenu> getMenuList(long id) {
+        List<AuthMenu> menus = new ArrayList<>();
+        UserPO userPO = userDao.findOne(id);
+        List<RolePO> rolePOS = userPO.getRoles();
+        for (RolePO rolePO : rolePOS){
+           List<AuthMenuPO> menuPOS = rolePO.getAuthMenus();
+           for (AuthMenuPO menuPO : menuPOS){
+               AuthMenu menu = BeanMapUtils.copy(menuPO);
+               if (!menus.contains(menu)){
+                   menus.add(menu);
+               }
+           }
+        }
+        return menus;
     }
 
 
